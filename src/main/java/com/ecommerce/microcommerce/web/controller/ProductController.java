@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -103,6 +106,19 @@ public class ProductController {
         return productDao.chercherUnProduitCher(400);
     }
 
+    @GetMapping(value = "/AdminProduits")
+    public ResponseEntity calculerMargeProduit() {
+        Iterable<Product> produits = productDao.findAll();
 
+        List<String> liste = new ArrayList<>();
+        for (Product produit : produits) {
+            liste.add("\"" + produit.toString() + ": " + (produit.getPrix() - produit.getPrixAchat()) + "\"");
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(liste.toString());
+    }
 
 }
