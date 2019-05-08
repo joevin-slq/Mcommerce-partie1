@@ -120,5 +120,10 @@ public class ProductController {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(liste.toString());
     }
+    
+    @GetMapping(value = "/ProduitsAsc")
+    public List<Product>  trierProduitsParOrdreAlphabetique() {
+        return productDao.findAllByOrderByNomAsc();
+    }
 
 }
